@@ -38,70 +38,70 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
-import { useUserStore } from '@/stores/user';
-import { ElMessage } from 'element-plus';
-import { Plus } from '@element-plus/icons-vue';
+import { ref, reactive } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 
 // 使用 user store
-const userStore = useUserStore();
+const userStore = useUserStore()
 
 // 初始化表单数据
 interface Form {
-  operName: string;
-  password: string;
-  avatar: string | null;
+  operName: string
+  password: string
+  avatar: string | null
 }
 
 const form = reactive<Form>({
   operName: '',
   password: '',
   avatar: null,
-});
+})
 
-let selectedFile: File | null = null;
+let selectedFile: File | null = null
 
 // 处理头像选择
 const handleAvatarChange = (file: any) => {
-  const reader = new FileReader();
+  const reader = new FileReader()
   reader.onload = (e) => {
-    form.avatar = e.target?.result as string; // 更新本地显示的头像
-  };
-  reader.readAsDataURL(file.raw);
-  selectedFile = file.raw; // 保存文件对象用于后续上传
-};
+    form.avatar = e.target?.result as string // 更新本地显示的头像
+  }
+  reader.readAsDataURL(file.raw)
+  selectedFile = file.raw // 保存文件对象用于后续上传
+}
 
 // 获取上传组件实例
-const uploadRef = ref<any>(null);
+const uploadRef = ref<any>(null)
 
 // 提交表单
 const submitForm = async () => {
   if (!selectedFile) {
-    ElMessage.error('请选择要上传的头像');
-    return;
+    ElMessage.error('请选择要上传的头像')
+    return
   }
 
   // 创建 FormData 对象并附加所有表单数据和文件
-  const formData = new FormData();
-  formData.append('operName', form.operName);
-  formData.append('password', form.password);
-  formData.append('avatar', selectedFile);
+  const formData = new FormData()
+  formData.append('operName', form.operName)
+  formData.append('password', form.password)
+  formData.append('avatar', selectedFile)
 
   // 调用 store 中的 action 进行上传
-  await userStore.uploadAvatarReq(formData);
+  await userStore.uploadAvatarReq(formData)
 
   // 显示成功或错误消息
-  const successMessage = userStore.getUploadSuccessMessage;
-  const errorMessage = userStore.getErrorMessage;
+  const successMessage = userStore.getUploadSuccessMessage
+  const errorMessage = userStore.getErrorMessage
 
   if (successMessage) {
-    ElMessage.success(successMessage);
-    userStore.clearMessages(); // 清除消息
+    ElMessage.success(successMessage)
+    userStore.clearMessages() // 清除消息
   } else if (errorMessage) {
-    ElMessage.error(errorMessage);
-    userStore.clearMessages(); // 清除消息
+    ElMessage.error(errorMessage)
+    userStore.clearMessages() // 清除消息
   }
-};
+}
 </script>
 
 <style scoped>

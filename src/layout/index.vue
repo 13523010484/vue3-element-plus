@@ -14,20 +14,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import Header from '@/components/header/index.vue';
-import Aside from '@/components/aside/index.vue';
-import Main from '@/components/main/index.vue';
-import Footer from '@/components/footer/index.vue';
+import { ref, computed } from 'vue'
+import Header from '@/components/header/index.vue'
+import Aside from '@/components/aside/index.vue'
+import Main from '@/components/main/index.vue'
+import Footer from '@/components/footer/index.vue'
 
-const sideBarWidth = ref('220px');
-const headerHeight = ref('60px'); // 假设 Header 的高度为 60px
-const footerHeight = ref('60px'); // 假设 Footer 的高度为 60px
+const sideBarWidth = ref('220px')
+const headerHeight = ref('60px') // 假设 Header 的高度为 60px
+const footerHeight = ref('60px') // 假设 Footer 的高度为 60px
 
 // 计算 Main 的高度
 const mainHeight = computed(() => {
-  return `calc(100vh - ${headerHeight.value} - ${footerHeight.value})`;
-});
+  return `calc(100vh - ${headerHeight.value} - ${footerHeight.value})`
+})
 </script>
 
 <style scoped>

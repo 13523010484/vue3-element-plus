@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import Layout from '@/layout/index.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import Layout from '@/layout/index.vue'
 
 const routes = [
   {
@@ -97,11 +97,11 @@ const routes = [
   //   name: 'not-found',
   //   component: () => import('@/views/404.vue'), // 确保你有一个 404.vue 文件
   // },
-];
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-});
+})
 
-export default router;
+export default router
