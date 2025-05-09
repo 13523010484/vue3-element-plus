@@ -9,16 +9,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 // 获取当前路由
-const route = useRoute();
+const route = useRoute()
 
 // 创建一个计算属性，当路由变化时 key 也会随之变化
-const routeKey = computed(() => route.path);
+const routeKey = computed(() => route.path)
 
-const props = defineProps<{ width: string }>();
+const props = defineProps<{ width: string }>()
 </script>
 
 <style scoped>
@@ -30,6 +30,7 @@ const props = defineProps<{ width: string }>();
   box-sizing: border-box;
   margin-top: 60px;
   margin-bottom: 60px;
+  background: #f5f5f5;
 }
 
 /* 过渡效果 */

@@ -12,11 +12,7 @@
       :collapse="isCollapse"
       router
     >
-      <el-sub-menu
-        v-for="(route, index) in managementRoutes"
-        :key="index"
-        :index="route.fullPath"
-      >
+      <el-sub-menu v-for="(route, index) in managementRoutes" :key="index" :index="route.fullPath">
         <template #title>
           <el-icon><component :is="resolveIcon(route.meta.icon)" /></el-icon>
           <span>{{ route.meta.title }}</span>
@@ -34,8 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, resolveComponent } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, computed, resolveComponent } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import {
   Location,
   Document,
@@ -46,22 +42,22 @@ import {
   User,
   Check,
   Postcard,
-} from '@element-plus/icons-vue';
-import { defineEmits } from 'vue';
+} from '@element-plus/icons-vue'
+import { defineEmits } from 'vue'
 
-const isCollapse = ref(false);
-const emit = defineEmits(['update:width']);
+const isCollapse = ref(false)
+const emit = defineEmits(['update:width'])
 
 // 获取当前路由实例
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 // 计算激活的菜单项索引
-const activeIndex = computed(() => route.path);
+const activeIndex = computed(() => route.path)
 
 // 定义一个函数来动态解析图标组件
 const resolveIcon = (iconName: string | undefined) => {
-  console.log('iconName::', iconName);
+  console.log('iconName::', iconName)
   return {
     Location,
     Document,
@@ -72,7 +68,7 @@ const resolveIcon = (iconName: string | undefined) => {
     User,
     Check,
     Postcard,
-  }[iconName];
+  }[iconName || 'Location']
   // if (!iconName) return Menu;
   // const iconComponent = resolveComponent(iconName);
   // console.log('iconComponent::', iconComponent);
@@ -82,10 +78,10 @@ const resolveIcon = (iconName: string | undefined) => {
   //   console.warn(`未知图标: ${iconName}`);
   //   return Menu; // 默认使用 Menu 图标
   // }
-};
+}
 
 // 过滤路由，只保留带有 meta.title 的路由，并计算 fullPath
-const filteredRoutes = computed(() => filterRoutes(router.getRoutes()));
+const filteredRoutes = computed(() => filterRoutes(router.getRoutes()))
 
 function filterRoutes(routes: any[]): any[] {
   return routes
@@ -93,25 +89,22 @@ function filterRoutes(routes: any[]): any[] {
     .map((route) => ({
       ...route,
       fullPath: router.resolve({ name: route.name }).href,
-      children:
-        route.children?.length > 0 ? filterRoutes(route.children) : undefined,
-    }));
+      children: route.children?.length > 0 ? filterRoutes(route.children) : undefined,
+    }))
 }
 
 const managementRoutes = computed(() =>
-  filteredRoutes.value.filter(
-    (route) => route.children && route.children.length > 0
-  )
-);
+  filteredRoutes.value.filter((route) => route.children && route.children.length > 0),
+)
 
 // 切换折叠状态
 const toggleCollapse = () => {
-  isCollapse.value = !isCollapse.value;
-  emit('update:width', isCollapse.value ? '60px' : '220px');
-};
+  isCollapse.value = !isCollapse.value
+  emit('update:width', isCollapse.value ? '60px' : '220px')
+}
 
 // 计算宽度
-const computedWidth = computed(() => (isCollapse.value ? '60px' : '220px'));
+const computedWidth = computed(() => (isCollapse.value ? '60px' : '220px'))
 </script>
 
 <style scoped>

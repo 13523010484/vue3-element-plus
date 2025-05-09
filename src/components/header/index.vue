@@ -43,60 +43,61 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import type { TabsPaneContext } from 'element-plus';
-import { useUserStore } from '@/stores/user';
-import { ElMessage } from 'element-plus';
-import { User, SwitchButton } from '@element-plus/icons-vue';
+import { computed, onMounted, ref } from 'vue'
+import type { TabsPaneContext } from 'element-plus'
+import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus'
+import { User, SwitchButton } from '@element-plus/icons-vue'
 
 // 获取父组件传递的宽度属性
-const props = defineProps<{ width: string }>();
+const props = defineProps<{ width: string }>()
 
-const activeName = ref('first');
+const activeName = ref('first')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event);
-};
+  console.log(tab, event)
+}
 
 // 使用 user store
-const userStore = useUserStore();
+const userStore = useUserStore()
 
 // 计算属性获取用户信息
-const userInfo = computed(() => userStore.userInfo);
+const userInfo = computed(() => userStore.userInfo)
 
 // 默认头像URL
 const defaultAvatar = ref<string>(
-  'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
-);
+  'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+)
 
 // 初始化时加载用户信息
 onMounted(async () => {
-  await userStore.userInfoReq();
-});
+  await userStore.userInfoReq()
+})
 
 // 处理下拉菜单命令
 const handleCommand = (command: string) => {
   if (command === 'setPassword') {
-    setPassword();
+    setPassword()
   } else if (command === 'logout') {
-    logout();
+    logout()
   }
-};
+}
 
 // 设置密码逻辑（可以根据需要修改）
 const setPassword = () => {
-  ElMessage.info('设置密码功能暂未实现');
+  ElMessage.info('设置密码功能暂未实现')
   // 这里可以跳转到设置密码页面或弹出设置密码对话框
-};
+}
 
 // 退出登录逻辑
 const logout = () => {
   // 清除用户信息并跳转到登录页面
-  userStore.$reset(); // 重置 store 状态
-  ElMessage.success('已退出登录');
+  userStore.$reset() // 重置 store 状态
+  ElMessage.success('已退出登录')
+  sessionStorage.removeItem('token')
   // 跳转到登录页面或其他操作
-  window.location.href = '/login'; // 示例跳转到登录页面
-};
+  window.location.href = '/login' // 示例跳转到登录页面
+}
 </script>
 
 <style scoped>

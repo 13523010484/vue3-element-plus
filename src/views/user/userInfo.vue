@@ -6,8 +6,7 @@
       </div>
     </template>
 
-    <!-- 其他表单字段 -->
-    <el-form :model="form">
+    <el-form ref="ruleFormRef" :model="form">
       <el-form-item label="操作用户名">
         <el-input v-model="form.operName"></el-input>
       </el-form-item>
@@ -42,6 +41,7 @@ import { ref, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
+import type { FormInstance } from 'element-plus'
 
 // 使用 user store
 const userStore = useUserStore()
@@ -59,6 +59,8 @@ const form = reactive<Form>({
   avatar: null,
 })
 
+const ruleFormRef = ref<FormInstance>()
+
 let selectedFile: File | null = null
 
 // 处理头像选择
@@ -74,32 +76,35 @@ const handleAvatarChange = (file: any) => {
 // 获取上传组件实例
 const uploadRef = ref<any>(null)
 
-// 提交表单
+// 提交表单方法
 const submitForm = async () => {
   if (!selectedFile) {
     ElMessage.error('请选择要上传的头像')
     return
   }
 
-  // 创建 FormData 对象并附加所有表单数据和文件
-  const formData = new FormData()
-  formData.append('operName', form.operName)
-  formData.append('password', form.password)
-  formData.append('avatar', selectedFile)
+  try {
+    const formData = new FormData()
+    formData.append('operName', form.operName)
+    formData.append('password', form.password)
+    formData.append('avatar', selectedFile)
 
-  // 调用 store 中的 action 进行上传
-  await userStore.uploadAvatarReq(formData)
+    const res = await userStore.uploadAvatarReq(formData)
 
-  // 显示成功或错误消息
-  const successMessage = userStore.getUploadSuccessMessage
-  const errorMessage = userStore.getErrorMessage
-
-  if (successMessage) {
-    ElMessage.success(successMessage)
-    userStore.clearMessages() // 清除消息
-  } else if (errorMessage) {
-    ElMessage.error(errorMessage)
-    userStore.clearMessages() // 清除消息
+    if (res && res.status === 200) {
+      ElMessage.success('上传成功。')
+      Object.assign(form, {
+        operName: '',
+        password: '',
+        avatar: null,
+      })
+      selectedFile = null
+      uploadRef.value?.clearFiles()
+      ruleFormRef.value?.resetFields()
+      userStore.clearMessages()
+    }
+  } catch (error) {
+    userStore.clearMessages()
   }
 }
 </script>
